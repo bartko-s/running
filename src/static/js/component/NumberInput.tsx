@@ -4,14 +4,31 @@ import {ReactNode} from 'react';
 type Props = Readonly<{
     onIncreaseHandler: () => void,
     onDecreaseHandler: () => void,
-    value: string | number,
+    onValueChange: (val: number) => void,
+    value: number,
     isLocked: boolean,
+    step: number,
+    valueFormatter?: (val: number) => string,
 }>
 
-export class Input extends React.Component<Props, {}> {
-    repeater?: number
-    delay?: number
-    speedUpTimes?: number
+const defaultProps = {
+    step: 1
+}
+
+type State = typeof initialState
+
+const initialState =  {
+    isFocused: false
+}
+
+export class NumberInput extends React.Component<Props, State> {
+    static defaultProps = defaultProps;
+
+    readonly state: State = initialState;
+
+    private repeater?: number
+    private delay?: number
+    private speedUpTimes?: number
 
     componentWillUnmount(): void {
         this.stopRepeater();
@@ -43,17 +60,50 @@ export class Input extends React.Component<Props, {}> {
         }, 200)
     }
 
+    valueChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value
+        this.props.onValueChange(Number(value))
+    }
+
+    focusHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+        e.persist();
+
+        this.setState({
+            isFocused: true
+        }, () => {
+            e.target.select()
+        })
+    }
+
+    blurHandler = () => {
+        this.setState({
+            isFocused: false
+        })
+    }
+
+    wheelHandler = () => {
+
+    }
+
+    get value(): string {
+        if(this.props.valueFormatter != undefined && this.state.isFocused == false) {
+            return this.props.valueFormatter(this.props.value)
+        } else {
+            return this.props.value.toString()
+        }
+    }
+
     renderIncreaseButtons = () => {
         if(!this.props.isLocked) {
             return (
-                <button className="input__button input__button--increase"
+                <span className="input__button input__button--increase"
                         onClick={() => {this.stopRepeater(); this.props.onIncreaseHandler();}}
                         onMouseUp={this.stopRepeater}
                         onTouchEnd={this.stopRepeater}
                         onMouseDown={() => {this.startRepeater(this.props.onIncreaseHandler)}}
                         onTouchStart={() => {this.startRepeater(this.props.onIncreaseHandler)}}
                         title="Increase"
-                > + </button>
+                > + </span>
             )
 
         }
@@ -62,16 +112,32 @@ export class Input extends React.Component<Props, {}> {
     renderDecreaseButtons = () => {
         if(!this.props.isLocked) {
             return (
-                <button className="input__button input__button--decrease"
+                <span className="input__button input__button--decrease"
                         onClick={() => {this.stopRepeater(); this.props.onDecreaseHandler()}}
                         onMouseUp={this.stopRepeater}
                         onTouchEnd={this.stopRepeater}
                         onMouseDown={() => {this.startRepeater(this.props.onDecreaseHandler)}}
                         onTouchStart={() => {this.startRepeater(this.props.onDecreaseHandler)}}
                         title="Decrease"
-                >-</button>
+                >-</span>
             )
 
+        }
+    }
+
+    renderInput = () => {
+        if(this.props.isLocked) {
+            return <span className="input__value">{this.value}</span>
+        } else {
+            return <input className="input__value input__value--editable"
+                          value={this.value}
+                          type="number"
+                          step={this.props.step}
+                          onChange={this.valueChangeHandler}
+                          onFocus={this.focusHandler}
+                          onBlur={this.blurHandler}
+                          onWheel={this.wheelHandler}
+            />
         }
     }
 
@@ -79,7 +145,7 @@ export class Input extends React.Component<Props, {}> {
         return (
             <div className="input">
                 {this.renderIncreaseButtons()}
-                <span className="input__value">{this.props.value}</span>
+                {this.renderInput()}
                 {this.renderDecreaseButtons()}
             </div>
         )

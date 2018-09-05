@@ -1,7 +1,10 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Input} from "../component/Input"
 import {Lock} from "../component/Lock"
+import {Distance} from "../component/Distance"
+import {Hours} from "../component/Hours"
+import {Minutes} from "../component/Minutes"
+import {Seconds} from "../component/Seconds"
 
 type State = Readonly<typeof initialState>
 
@@ -9,21 +12,22 @@ type Props = Readonly<{}>
 
 type LockedInput = "time" | "pace" | "distance"
 
+// official word half-marathon record
+const defaultTime: number = (58 * 60) + 23
+const defaultDistance: number = 21.1
+
 const initialState = {
-    // official word half-marathon record
-    time: (58 * 60) + 23, //seconds
-    pace: ((58 * 60) + 23) / 21.1, // seconds/km
-    distance: 21.1, //km
+    time: defaultTime, //seconds
+    pace: defaultTime / defaultDistance, // seconds/km
+    distance: defaultDistance, //km
     lockedInput: "distance" as LockedInput
 }
 
 export class Pace extends React.Component<Props, State> {
     readonly state: State = initialState;
 
-    changeTimeHandler = (step: number) => {
+    changeTimeHandler = (newTime: number) => {
         this.setState((prevState: State) => {
-            const newTime = this.state.time + step;
-
             let newState = {
                 ...prevState
             }
@@ -42,10 +46,8 @@ export class Pace extends React.Component<Props, State> {
         })
     }
 
-    changePaceHandler = (step: number) => {
+    changePaceHandler = (newPace: number) => {
         this.setState((prevState: State) => {
-            const newPace = this.state.pace + step;
-
             let newState = {
                 ...prevState
             }
@@ -64,15 +66,15 @@ export class Pace extends React.Component<Props, State> {
         })
     }
 
-    changeDistanceHandler = (step: number) => {
+    changeDistanceHandler = (newDistance: number) => {
         this.setState((prevState: State) => {
-            const newDistance = this.state.distance + step;
-
             let newState = {
                 ...prevState
             }
 
             if(newDistance > 0) {
+                newDistance = Math.floor(newDistance * 10) / 10
+
                 if(prevState.lockedInput == "time") {
                     newState['distance'] = newDistance
                     newState['pace'] = prevState['time'] / newDistance
@@ -96,24 +98,19 @@ export class Pace extends React.Component<Props, State> {
         }
     }
 
-    format = (num: number): string => {
-        if (num <= 9) {
-            return "0" + num;
-        } else {
-            return num.toString()
-        }
+    get timeTotal(): number {
+        return this.state.time
+    }
+
+    get paceTotal(): number {
+        return this.state.pace
+    }
+
+    get distanceTotal(): number {
+        return this.state.distance
     }
 
     render(): ReactNode {
-        let time_hours = Math.floor(this.state.time / 3600)
-        let time_minutes = Math.floor((this.state.time - (time_hours * 3600)) / 60)
-        let time_seconds = Math.floor(this.state.time - (time_hours * 3600) - (time_minutes * 60))
-
-        let pace_minutes = Math.floor(this.state.pace / 60)
-        let pace_seconds = Math.floor(this.state.pace - (Number(pace_minutes) * 60))
-
-        let distance = Number(this.state.distance.toFixed(1));
-
         return (
             <div className="content">
                 <h1>Running Pace Calculator</h1>
@@ -122,33 +119,30 @@ export class Pace extends React.Component<Props, State> {
                           onClick={this.onLockClickHandler("distance")}
                     />
                     <span className="label">Distance</span>
-                    <Input value={distance}
-                           onIncreaseHandler={() => {this.changeDistanceHandler(0.1)}}
-                           onDecreaseHandler={() => {this.changeDistanceHandler(-0.1)}}
-                           isLocked={this.state.lockedInput == "distance"}
-                    /> km
+                    <Distance distance={this.distanceTotal}
+                              isLocked={this.state.lockedInput == "distance"}
+                              onValueChangeHandler={this.changeDistanceHandler}
+                    />
+                    <span className="unit">km</span>
                 </div>
                 <div className="block">
                     <Lock state={this.state.lockedInput == "time"}
                           onClick={this.onLockClickHandler("time")}
                     />
                     <span className="label">Time</span>
-                    <Input value={this.format(time_hours)}
-                           onIncreaseHandler={() => {this.changeTimeHandler(3600)}}
-                           onDecreaseHandler={() => {this.changeTimeHandler(-3600)}}
+                    <Hours time={this.timeTotal}
                            isLocked={this.state.lockedInput == "time"}
+                           onValueChangeHandler={this.changeTimeHandler}
                     />
                     <span className="separator">:</span>
-                    <Input value={this.format(time_minutes)}
-                           onIncreaseHandler={() => {this.changeTimeHandler(60)}}
-                           onDecreaseHandler={() => {this.changeTimeHandler(-60)}}
-                           isLocked={this.state.lockedInput == "time"}
+                    <Minutes time={this.timeTotal}
+                             isLocked={this.state.lockedInput == "time"}
+                             onValueChangeHandler={this.changeTimeHandler}
                     />
                     <span className="separator">:</span>
-                    <Input value={this.format(time_seconds)}
-                           onIncreaseHandler={() => {this.changeTimeHandler(1)}}
-                           onDecreaseHandler={() => {this.changeTimeHandler(-1)}}
-                           isLocked={this.state.lockedInput == "time"}
+                    <Seconds time={this.timeTotal}
+                             isLocked={this.state.lockedInput == "time"}
+                             onValueChangeHandler={this.changeTimeHandler}
                     />
                 </div>
                 <div className="block">
@@ -156,17 +150,16 @@ export class Pace extends React.Component<Props, State> {
                           onClick={this.onLockClickHandler("pace")}
                     />
                     <span className="label">Pace</span>
-                    <Input value={this.format(pace_minutes)}
-                           onIncreaseHandler={() => {this.changePaceHandler(60)}}
-                           onDecreaseHandler={() => {this.changePaceHandler(-60)}}
-                           isLocked={this.state.lockedInput == "pace"}
+                    <Minutes time={this.paceTotal}
+                             isLocked={this.state.lockedInput == "pace"}
+                             onValueChangeHandler={this.changePaceHandler}
                     />
                     <span className="separator">:</span>
-                    <Input value={this.format(pace_seconds)}
-                           onIncreaseHandler={() => {this.changePaceHandler(1)}}
-                           onDecreaseHandler={() => {this.changePaceHandler(-1)}}
-                           isLocked={this.state.lockedInput == "pace"}
-                    /> min/km
+                    <Seconds time={this.paceTotal}
+                             isLocked={this.state.lockedInput == "pace"}
+                             onValueChangeHandler={this.changePaceHandler}
+                    />
+                    <span className="unit">min/km</span>
                 </div>
             </div>
         )

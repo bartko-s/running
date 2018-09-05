@@ -15,6 +15,15 @@ body {
     outline: 0;
 }
 
+.remove-spinner {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        margin: 0;
+    }
+}
+
 button:focus {
     outline:0;
 }
@@ -44,12 +53,21 @@ h1 {
     &__value {
         display: inline-block;
         width: 100%;
+        height: 4rem;
         line-height: 4rem;
         font-size: 3rem;
         text-align: center;
         position: absolute;
         left: 0;
         top: 2rem;
+        &--editable {
+            @extend .remove-spinner;
+            border: 0.1rem solid #ddd;
+            border-radius: 0.2rem;
+            &:focus {
+                background-color: #ffffaa;
+            }
+        }
     }
     &__button {
         cursor: default;
@@ -71,6 +89,9 @@ h1 {
             mask-repeat: no-repeat;
             mask-position: 50% 50%;
             mask-size: 3.3rem;
+        }
+        &:hover:before {
+            background-color: lighten(black, 50);
         }
         &--increase {
             left: 0;
@@ -111,11 +132,19 @@ h1 {
         content: '';
         height: 100%;
         width: 100%;
-        background-color: green;
+        background-color: black;
         mask-image: url("../img/lock-opened.svg");
         mask-repeat: no-repeat;
         mask-position: 0 0;
         mask-size: 3rem;
+    }
+    &--unlocked {
+        &:before {
+            background-color: green;
+        }
+        &:hover:before {
+            background-color: lighten(green, 10);
+        }
     }
     &--locked {
         &:before {
@@ -130,4 +159,8 @@ h1 {
     padding: 0 0.5rem;
     width: 8.2rem;
     font-size: 1.8rem;
+}
+
+.unit {
+    margin-left: 0.5rem;
 }

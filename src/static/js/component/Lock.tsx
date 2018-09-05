@@ -9,14 +9,14 @@ type Props = Readonly<{
 export class Lock extends React.Component<Props, {}> {
     render(): ReactNode {
         const state = this.props.state ? "Locked" : "Lock"
-        const stateClass = this.props.state ? "lock lock--locked" : "lock"
+        const stateClass = this.props.state ? "lock lock--locked" : "lock lock--unlocked"
         const title = this.props.state ? "" : "Lock"
 
         return (
-            <button onClick={this.props.onClick}
+            <span onClick={this.props.onClick}
                     className={stateClass}
                     title={title}
-            >{state}</button>
+            >{state}</span>
         )
     }
 }
