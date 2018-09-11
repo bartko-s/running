@@ -1,0 +1,146 @@
+[
+    {
+        "distance": 1,
+        "time": 131.96,
+        "location_abbr": "ITA",
+        "location": "Italy",
+        "data": 1999,
+        "gender": "male",
+        "name": "Noah Ngeny",
+        "nationality": "Kenya",
+        "nationality_abbr": "KEN"
+
+    },
+    {
+        "distance": 1,
+        "time": 148.98,
+        "location_abbr": "BEL",
+        "location": "Belgie",
+        "data": 1996,
+        "gender": "female",
+        "name": "Svetlana Masterkova",
+        "nationality": "Russia",
+        "nationality_abbr": "RUS"
+
+    },
+    {
+        "distance": 5,
+        "time": 757.35,
+        "location_abbr": "NED",
+        "location": "Netherlands",
+        "data": 2004,
+        "gender": "male",
+        "name": "Kenenisa Bekele",
+        "nationality": "Ethiopia",
+        "nationality_abbr": "ETH"
+
+    },
+    {
+        "distance": 5,
+        "time": 851.15,
+        "location_abbr": "NOR",
+        "location": "Norway",
+        "data": 2008,
+        "gender": "female",
+        "name": "Tirunesh Dibaba",
+        "nationality": "Ethiopia",
+        "nationality_abbr": "ETH"
+
+    },
+    {
+        "distance": 10,
+        "time": 1577.53,
+        "location_abbr": "BEL",
+        "location": "Belgium",
+        "data": 2005,
+        "gender": "male",
+        "name": "Kenenisa Bekele",
+        "nationality": "Ethiopia",
+        "nationality_abbr": "ETH"
+
+    },
+    {
+        "distance": 10,
+        "time": 1757.45,
+        "location_abbr": "BRA",
+        "location": "Brazil",
+        "data": 2016,
+        "gender": "female",
+        "name": "Almaz Ayana",
+        "nationality": "Ethiopia",
+        "nationality_abbr": "ETH"
+
+    },
+    {
+        "distance": 15,
+        "time": 2473,
+        "location_abbr": "NED",
+        "location": "Netherlands",
+        "data": 2010,
+        "gender": "male",
+        "name": "Leonard Patrick Komon",
+        "nationality": "Kenya",
+        "nationality_abbr": "KEN"
+
+    },
+    {
+        "distance": 15,
+        "time": 2737,
+        "location_abbr": "CZE",
+        "location": "Czechoslovakia",
+        "data": 2017,
+        "gender": "female",
+        "name": "Joyciline Jepkosgei",
+        "nationality": "Kenya",
+        "nationality_abbr": "KEN"
+
+    },
+    {
+        "distance": 21.0975,
+        "time": 3503,
+        "location_abbr": "POR",
+        "location": "Portugal",
+        "data": 2010,
+        "gender": "male",
+        "name": "Zersenay Tadese",
+        "nationality": "Eritrea",
+        "nationality_abbr": "ERI"
+
+    },
+    {
+        "distance": 21.0975,
+        "time": 3891,
+        "location_abbr": "SPA",
+        "location": "Spain",
+        "data": 2017,
+        "gender": "female",
+        "name": "Joyciline Jepkosgei",
+        "nationality": "Kenya",
+        "nationality_abbr": "KEN"
+
+    },
+    {
+        "distance": 42.195,
+        "time": 7377,
+        "location_abbr": "ITA",
+        "location": "Italy",
+        "data": 2014,
+        "gender": "male",
+        "name": "Dennis Kipruto Kimetto",
+        "nationality": "Kenya",
+        "nationality_abbr": "KEN"
+
+    },
+    {
+        "distance": 42.195,
+        "time": 8125,
+        "location_abbr": "GBR",
+        "location": "Great Britain",
+        "data": 2003,
+        "gender": "female",
+        "name": "Paula Radcliffe",
+        "nationality": "Great Britain",
+        "nationality_abbr": "GBR"
+
+    }
+]

@@ -14,7 +14,7 @@ export class Seconds extends React.Component<Props, {}> {
         const time = this.props.time
         const h = Math.floor(time / 3600)
         const m = Math.floor((time - (h * 3600)) / 60)
-        return Math.floor(time - (h * 3600) - (m * 60))
+        return Math.round(time - (h * 3600) - (m * 60))
     }
 
     increaseHandler = () => {

@@ -5,6 +5,8 @@ import {Distance} from "../component/Distance"
 import {Hours} from "../component/Hours"
 import {Minutes} from "../component/Minutes"
 import {Seconds} from "../component/Seconds"
+import {WordRecords} from "../component/WordRecords"
+import {Modal} from "../component/Modal"
 
 type State = Readonly<typeof initialState>
 
@@ -20,7 +22,8 @@ const initialState = {
     time: defaultTime, //seconds
     pace: defaultTime / defaultDistance, // seconds/km
     distance: defaultDistance, //km
-    lockedInput: "distance" as LockedInput
+    lockedInput: "distance" as LockedInput,
+    showWordRecordsModal: false ,
 }
 
 export class Pace extends React.Component<Props, State> {
@@ -98,6 +101,30 @@ export class Pace extends React.Component<Props, State> {
         }
     }
 
+    closeWordRecordsModalWindow = () => {
+        this.setState({
+            showWordRecordsModal: false
+        })
+    }
+
+    showWordRecords = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+
+        this.setState({
+            showWordRecordsModal: true
+        })
+    }
+
+    setTimeAndDistance = (distance: number, time: number) => {
+        this.closeWordRecordsModalWindow()
+
+        this.setState({
+            time: time,
+            distance: distance,
+            pace: time / distance,
+        })
+    }
+
     get timeTotal(): number {
         return this.state.time
     }
@@ -110,9 +137,22 @@ export class Pace extends React.Component<Props, State> {
         return this.state.distance
     }
 
+    renderWordRecordsModal = () => {
+
+
+        if(this.state.showWordRecordsModal) {
+            return (
+                <Modal onCloseHandler={this.closeWordRecordsModalWindow}>
+                    <WordRecords onPickRecordHandler={this.setTimeAndDistance}/>
+                </Modal>
+            )
+        }
+    }
+
     render(): ReactNode {
         return (
             <div className="content">
+                {this.renderWordRecordsModal()}
                 <h1>Running Pace Calculator</h1>
                 <div className="block">
                     <Lock state={this.state.lockedInput == "distance"}
@@ -124,6 +164,11 @@ export class Pace extends React.Component<Props, State> {
                               onValueChangeHandler={this.changeDistanceHandler}
                     />
                     <span className="unit">km</span>
+                    <a href="#"
+                       className="word-records-link"
+                       onClick={this.showWordRecords}
+                       title="Show word records"
+                    >Word Records</a>
                 </div>
                 <div className="block">
                     <Lock state={this.state.lockedInput == "time"}
