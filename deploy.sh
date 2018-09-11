@@ -70,4 +70,4 @@ rsync -azv --no-o --no-g --delete --delete-excluded --delete-after --progress -e
     "$ssh":~/${server_path}/
 
 
-# echo "-------------DEPLOYED ON ${target} ----------------"
+echo "-------------DEPLOYED ON ${target} ----------------"
