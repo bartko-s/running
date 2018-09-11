@@ -10,7 +10,7 @@ type Props = Readonly<{
 
 export class Distance extends React.Component<Props, {}> {
     get value(): number {
-        return Number(this.props.distance.toFixed(1))
+        return Number(this.props.distance.toFixed(2))
     }
 
     increaseHandler = () => {
@@ -25,6 +25,10 @@ export class Distance extends React.Component<Props, {}> {
         this.props.onValueChangeHandler(val)
     }
 
+    valueFormatter = (val: number): string => {
+        return val.toFixed(2)
+    }
+
     render(): ReactNode {
         return (
             <NumberInput value={this.value}
@@ -33,6 +37,8 @@ export class Distance extends React.Component<Props, {}> {
                          onDecreaseHandler={this.decreaseHandler}
                          onValueChange={this.valueChangeHandler}
                          step={0.1}
+                         extraClass="input--distance"
+                         valueFormatter={this.valueFormatter}
             />
         )
     }

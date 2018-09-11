@@ -76,8 +76,6 @@ export class Pace extends React.Component<Props, State> {
             }
 
             if(newDistance > 0) {
-                newDistance = Math.floor(newDistance * 10) / 10
-
                 if(prevState.lockedInput == "time") {
                     newState['distance'] = newDistance
                     newState['pace'] = prevState['time'] / newDistance

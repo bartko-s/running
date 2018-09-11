@@ -9,6 +9,7 @@ type Props = Readonly<{
     isLocked: boolean,
     step: number,
     valueFormatter?: (val: number) => string,
+    extraClass?: string
 }>
 
 const defaultProps = {
@@ -143,7 +144,7 @@ export class NumberInput extends React.Component<Props, State> {
 
     render(): ReactNode {
         return (
-            <div className="input">
+            <div className={"input " + this.props.extraClass}>
                 {this.renderIncreaseButtons()}
                 {this.renderInput()}
                 {this.renderDecreaseButtons()}
