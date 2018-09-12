@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const autoprefixer = require('autoprefixer');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const cssnano = require('cssnano');
 
@@ -24,7 +23,7 @@ function postCssLoader(isDevelopment) {
 
 function buildConfig(isDevelopment) {
     return {
-        mode: 'none',
+        mode: isDevelopment ? 'development' : 'production',
         cache: isDevelopment,
         devtool: isDevelopment ? 'eval-source-map' : false,
         entry: {
@@ -84,22 +83,13 @@ function buildConfig(isDevelopment) {
         },
         plugins: isDevelopment ?
             [
-                new webpack.optimize.ModuleConcatenationPlugin(),
-                new webpack.NamedModulesPlugin(),
+                new CleanWebpackPlugin(['src/static/build']),
                 new webpack.HotModuleReplacementPlugin(),
-                new webpack.NoEmitOnErrorsPlugin()
             ] : [
                 new CleanWebpackPlugin(['src/static/build']),
-                new webpack.optimize.ModuleConcatenationPlugin(),
-                new webpack.DefinePlugin({
-                    'process.env': {
-                        'NODE_ENV': JSON.stringify('production')
-                    }
-                }),
                 new MiniCssExtractPlugin({
                     filename: "[name].styles.css"
                 }),
-                new UglifyJSPlugin()
             ],
         devServer: isDevelopment ? {
             open: true,
@@ -114,4 +104,8 @@ function buildConfig(isDevelopment) {
     };
 }
 
-module.exports = buildConfig(process.env.NODE_ENV === 'development');
+module.exports = function(env, argv) {
+    const config = buildConfig(argv.mode === 'development');
+    // console.log(config);
+    return config
+};
