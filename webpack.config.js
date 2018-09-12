@@ -68,7 +68,7 @@ function buildConfig(isDevelopment) {
         output: {
             filename: '[name].bundle.js',
             path: path.join(__dirname, '/src/static/build/'),
-            publicPath: isDevelopment ? 'http://localhost:8080/src/static/build/' : '/static/build/'
+            publicPath: isDevelopment ? 'http://localhost:8080/static/build/' : '/static/build/'
         },
         optimization: {
             splitChunks: {
