@@ -24,7 +24,7 @@ const initialState = {
     loading: true
 }
 
-export class WordRecords extends React.Component<Props, State> {
+export class WorldRecords extends React.Component<Props, State> {
     readonly state: State = initialState;
 
     componentDidMount(): void {
@@ -45,33 +45,33 @@ export class WordRecords extends React.Component<Props, State> {
 
         return this.state.athletes.map((item) => {
             return (
-                <div className="word-record__item"
+                <div className="world-record__item"
                      key={item.time + item.gender + item.distance}
                 >
-                    <div className="word-record__distance">{Math.round(item.distance * 100) / 100} km</div>
-                    <div className="word-record__center">
+                    <div className="world-record__distance">{Math.round(item.distance * 100) / 100} km</div>
+                    <div className="world-record__center">
                         <div>
-                                <span className={"word-record__gender word-record__gender--" + item.gender.toLowerCase()}
+                                <span className={"world-record__gender world-record__gender--" + item.gender.toLowerCase()}
                                       title={item.gender.toUpperCase()}
                                 />
                             &nbsp;
                             <span>{item.name}</span>
                             &nbsp;
-                            <span className={"word-record__flag word-record__flag--" + item.nationality_abbr.toLowerCase()}
+                            <span className={"world-record__flag world-record__flag--" + item.nationality_abbr.toLowerCase()}
                                   title={item.nationality}
                             >{item.nationality_abbr}</span>
                         </div>
                         <div>
                             <span>{secondsToFullTime(item.time)}</span>
                             &nbsp;
-                            <span className={"word-record__flag word-record__flag--" + item.location_abbr.toLowerCase()}
+                            <span className={"world-record__flag world-record__flag--" + item.location_abbr.toLowerCase()}
                                   title={item.location}
                             >{item.location_abbr}</span>
                             &nbsp;
                             <span>({item.data})</span>
                         </div>
                     </div>
-                    <div className="word-record__pick">
+                    <div className="world-record__pick">
                         <button onClick={() => {this.props.onPickRecordHandler(item.distance, item.time)}}
                                 className="button"
                         >Pick</button>
@@ -84,7 +84,7 @@ export class WordRecords extends React.Component<Props, State> {
     render(): ReactNode {
         return (
             <>
-                <h1>Word Records</h1>
+                <h1>World Records</h1>
                 {this.renderRecords()}
             </>
         )

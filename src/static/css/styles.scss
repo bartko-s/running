@@ -207,7 +207,7 @@ h1 {
     }
 }
 
-.word-record {
+.world-record {
     &__item {
         display: flex;
         flex-direction: row;
@@ -315,7 +315,7 @@ h1 {
     }
 }
 
-.word-records-link {
+.world-records-link {
     text-indent:-9999px;
     margin-left: 1rem;
     mask-image: url('../img/medal-of-number-one.svg');
@@ -324,6 +324,9 @@ h1 {
     display: inline-block;
     height: 4rem;
     width: 4rem;
+    &:hover {
+        background-color: darken(darkgoldenrod, 10);
+    }
 }
 
 .button {

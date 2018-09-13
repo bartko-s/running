@@ -5,7 +5,7 @@ import {Distance} from "../component/Distance"
 import {Hours} from "../component/Hours"
 import {Minutes} from "../component/Minutes"
 import {Seconds} from "../component/Seconds"
-import {WordRecords} from "../component/WordRecords"
+import {WorldRecords} from "../component/WorldRecords"
 import {Modal} from "../component/Modal"
 
 type State = Readonly<typeof initialState>
@@ -14,7 +14,7 @@ type Props = Readonly<{}>
 
 type LockedInput = "time" | "pace" | "distance"
 
-// official word half-marathon record
+// official world half-marathon record
 const defaultTime: number = (58 * 60) + 23
 const defaultDistance: number = 21.1
 
@@ -23,7 +23,7 @@ const initialState = {
     pace: defaultTime / defaultDistance, // seconds/km
     distance: defaultDistance, //km
     lockedInput: "distance" as LockedInput,
-    showWordRecordsModal: false ,
+    showWorldRecordsModal: false ,
 }
 
 export class Pace extends React.Component<Props, State> {
@@ -99,22 +99,22 @@ export class Pace extends React.Component<Props, State> {
         }
     }
 
-    closeWordRecordsModalWindow = () => {
+    closeWorldRecordsModalWindow = () => {
         this.setState({
-            showWordRecordsModal: false
+            showWorldRecordsModal: false
         })
     }
 
-    showWordRecords = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    showWorldRecords = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
 
         this.setState({
-            showWordRecordsModal: true
+            showWorldRecordsModal: true
         })
     }
 
     setTimeAndDistance = (distance: number, time: number) => {
-        this.closeWordRecordsModalWindow()
+        this.closeWorldRecordsModalWindow()
 
         this.setState({
             time: time,
@@ -135,13 +135,13 @@ export class Pace extends React.Component<Props, State> {
         return this.state.distance
     }
 
-    renderWordRecordsModal = () => {
+    renderWorldRecordsModal = () => {
 
 
-        if(this.state.showWordRecordsModal) {
+        if(this.state.showWorldRecordsModal) {
             return (
-                <Modal onCloseHandler={this.closeWordRecordsModalWindow}>
-                    <WordRecords onPickRecordHandler={this.setTimeAndDistance}/>
+                <Modal onCloseHandler={this.closeWorldRecordsModalWindow}>
+                    <WorldRecords onPickRecordHandler={this.setTimeAndDistance}/>
                 </Modal>
             )
         }
@@ -150,7 +150,7 @@ export class Pace extends React.Component<Props, State> {
     render(): ReactNode {
         return (
             <div className="content">
-                {this.renderWordRecordsModal()}
+                {this.renderWorldRecordsModal()}
                 <h1>Running Pace Calculator</h1>
                 <div className="block">
                     <Lock state={this.state.lockedInput == "distance"}
@@ -163,10 +163,10 @@ export class Pace extends React.Component<Props, State> {
                     />
                     <span className="unit">km</span>
                     <a href="#"
-                       className="word-records-link"
-                       onClick={this.showWordRecords}
-                       title="Show word records"
-                    >Word Records</a>
+                       className="world-records-link"
+                       onClick={this.showWorldRecords}
+                       title="Show world records"
+                    >World Records</a>
                 </div>
                 <div className="block">
                     <Lock state={this.state.lockedInput == "time"}
