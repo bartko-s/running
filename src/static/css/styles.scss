@@ -4,6 +4,12 @@ html {
     height: 100%;
 }
 
+@media (max-width: 1024px) and (orientation: portrait) {
+    html {
+      font-size: calc(2.5vw);
+    }
+}
+
 body {
     font-size: 1.4rem;
     background-color: #fff;
