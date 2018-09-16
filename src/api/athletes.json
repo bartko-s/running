@@ -121,12 +121,12 @@
     },
     {
         "distance": 42.195,
-        "time": 7377,
-        "location_abbr": "ITA",
-        "location": "Italy",
-        "data": 2014,
+        "time": 7299,
+        "location_abbr": "GER",
+        "location": "Germany",
+        "data": 2018,
         "gender": "male",
-        "name": "Dennis Kipruto Kimetto",
+        "name": "Eliud Kipchoge",
         "nationality": "Kenya",
         "nationality_abbr": "KEN"
 
