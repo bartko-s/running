@@ -25,9 +25,9 @@ body {
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
         -webkit-appearance: none;
-        -moz-appearance: none;
         margin: 0;
     }
+    -moz-appearance:textfield;
 }
 
 button:focus {
