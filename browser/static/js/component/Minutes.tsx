@@ -16,14 +16,6 @@ export class Minutes extends React.Component<Props, {}> {
         return Math.floor((time - (h * 3600)) / 60)
     }
 
-    increaseHandler = () => {
-        this.props.onValueChangeHandler(this.props.time + 60)
-    }
-
-    decreaseHandler = () => {
-        this.props.onValueChangeHandler(this.props.time - 60)
-    }
-
     valueChangeHandler = (val: number) => {
         const hours = Math.floor(this.props.time / 3600)
         const seconds = this.props.time - (Math.floor(this.props.time / 60) * 60)
@@ -35,8 +27,6 @@ export class Minutes extends React.Component<Props, {}> {
         return (
             <NumberInput value={this.value}
                          isLocked={this.props.isLocked}
-                         onIncreaseHandler={this.increaseHandler}
-                         onDecreaseHandler={this.decreaseHandler}
                          onValueChange={this.valueChangeHandler}
                          valueFormatter={formatTimeDigits}
             />

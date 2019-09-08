@@ -13,14 +13,6 @@ export class Distance extends React.Component<Props, {}> {
         return Number(this.props.distance.toFixed(2))
     }
 
-    increaseHandler = () => {
-        this.props.onValueChangeHandler(this.props.distance + 0.1)
-    }
-
-    decreaseHandler = () => {
-        this.props.onValueChangeHandler(this.props.distance - 0.1)
-    }
-
     valueChangeHandler = (val: number) => {
         this.props.onValueChangeHandler(val)
     }
@@ -33,8 +25,6 @@ export class Distance extends React.Component<Props, {}> {
         return (
             <NumberInput value={this.value}
                          isLocked={this.props.isLocked}
-                         onIncreaseHandler={this.increaseHandler}
-                         onDecreaseHandler={this.decreaseHandler}
                          onValueChange={this.valueChangeHandler}
                          step={0.1}
                          extraClass="input--distance"
