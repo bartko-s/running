@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+
+  node-server:
+    command: exit
+
+  node-browser:
+    command: yarn --cwd "./browser" build

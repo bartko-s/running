@@ -1,12 +1,19 @@
-const path = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const autoprefixer = require('autoprefixer');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const cssnano = require('cssnano');
+import * as path from 'path'
+import * as webpack from 'webpack'
+import * as webpackDevServer from 'webpack-dev-server'
+import * as MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import * as autoprefixer from 'autoprefixer'
+import {CleanWebpackPlugin} from 'clean-webpack-plugin'
+import * as cssnano from 'cssnano'
+
+const protocol: 'https' | 'http' = 'http';
+const serverUrl: string = '0.0.0.0';
+const port: number = 8080;
+const publicPath: string = "/static/build/";
+const buildPath: string = path.join(__dirname, 'static/build');
 
 
-function postCssLoader(isDevelopment) {
+function postCssLoader(isDevelopment: boolean): webpack.Loader {
     return {
         loader: 'postcss-loader',
         options: {
@@ -21,16 +28,19 @@ function postCssLoader(isDevelopment) {
     }
 }
 
-function buildConfig(isDevelopment) {
+function buildConfig(isDevelopment: boolean): webpack.Configuration & webpackDevServer.Configuration {
     return {
         mode: isDevelopment ? 'development' : 'production',
         cache: isDevelopment,
         devtool: isDevelopment ? 'eval-source-map' : false,
         entry: {
-            index: [path.join(__dirname, 'src/static/app.tsx')],
+            index: [path.join(__dirname, 'static/app.tsx')],
         },
         resolve: {
-            extensions: ['*', '.ts', '.tsx', '.js', '.json', '.jsx']
+            extensions: ['*', '.ts', '.tsx', '.js', '.json', '.jsx'],
+            alias: {
+                'react-dom': isDevelopment ? '@hot-loader/react-dom': 'react-dom'
+            }
         },
         module: {
             rules: [
@@ -54,58 +64,72 @@ function buildConfig(isDevelopment) {
                             {loader: 'sass-loader', options: {sourceMap: true}}]
                         : [
                             MiniCssExtractPlugin.loader,
-                            {loader: 'css-loader', options: {minimize: true,}},
+                            {loader: 'css-loader'},
                             postCssLoader(isDevelopment),
                             {loader: 'sass-loader'}
                         ]
                 },
                 {
                     test: /\.(gif|jpg|jpeg|png|woff|woff2|eot|ttf|svg)$/,
-                    use: ['url-loader?limit=100000']
+                    use: [{
+                        loader: 'url-loader',
+                        options: {
+                            limit: 5000,
+                            fallback: 'file-loader',
+                        }
+                    }]
                 }
             ],
         },
         output: {
             filename: '[name].bundle.js',
-            path: path.join(__dirname, '/src/static/build/'),
-            publicPath: isDevelopment ? 'http://localhost:8080/static/build/' : '/static/build/'
+            path: buildPath,
+            publicPath: isDevelopment ? protocol+'://'+serverUrl+':'+port+publicPath : publicPath
         },
         optimization: {
             splitChunks: {
                 cacheGroups: {
                     commons: {
-                        test: /[\\/]node_modules[\\/]/,
+                        test: /node_modules/,
                         name: "vendor",
-                        chunks: "all"
+                        chunks: "all",
+                        enforce: true,
                     }
                 }
             }
         },
         plugins: isDevelopment ?
             [
-                new CleanWebpackPlugin(['src/static/build']),
+                new CleanWebpackPlugin(),
                 new webpack.HotModuleReplacementPlugin(),
             ] : [
-                new CleanWebpackPlugin(['src/static/build']),
+                new CleanWebpackPlugin(),
                 new MiniCssExtractPlugin({
                     filename: "[name].styles.css"
                 }),
             ],
         devServer: isDevelopment ? {
-            open: true,
-            overlay: true,
-            contentBase: path.join(__dirname, 'src'),
-            publicPath: 'http://localhost:8080/static/build/',
-            hot: true,
+            proxy: {
+                ['!'+publicPath+'*']: {
+                    target: protocol+'://node-server:8082',
+                    secure: false
+                }
+            },
             headers: {
                 'Access-Control-Allow-Origin': '*'
-            }
+            },
+            host: serverUrl,
+            overlay: true,
+            publicPath: protocol+'://'+serverUrl+':'+port+publicPath,
+            hot: true,
+            port: port,
+            https: protocol === 'https'
         } : {}
     };
 }
 
-module.exports = function(env, argv) {
+export default function(env: undefined, argv: webpack.Configuration) {
     const config = buildConfig(argv.mode === 'development');
     // console.log(config);
     return config
-};
+}

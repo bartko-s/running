@@ -1,0 +1,5 @@
+version: '3.7'
+
+services:
+  node-browser:
+    command: yarn --cwd "./browser" dev
