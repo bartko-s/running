@@ -7,12 +7,13 @@ import {Minutes} from "../component/Minutes"
 import {Seconds} from "../component/Seconds"
 import {WorldRecords} from "../component/WorldRecords"
 import {Modal} from "../component/Modal"
+import {Speed} from "../component/Speed"
 
 type State = Readonly<typeof initialState>
 
 type Props = Readonly<{}>
 
-type LockedInput = "time" | "pace" | "distance"
+type LockedInput = "time" | "pace-speed" | "distance"
 
 // official world half-marathon record
 const defaultTime: number = (58 * 60) + 23
@@ -39,7 +40,7 @@ export class Pace extends React.Component<Props, State> {
                 if(prevState.lockedInput == "distance") {
                     newState['time'] = newTime
                     newState['pace'] = newTime / prevState['distance']
-                } else if(prevState.lockedInput == "pace") {
+                } else if(prevState.lockedInput == "pace-speed") {
                     newState['time'] = newTime
                     newState['distance'] = newTime / prevState['pace']
                 }
@@ -69,6 +70,10 @@ export class Pace extends React.Component<Props, State> {
         })
     }
 
+    changeSpeedHandler = (newSpeed: number) => {
+        this.changePaceHandler(3600 / newSpeed);
+    }
+
     changeDistanceHandler = (newDistance: number) => {
         this.setState((prevState: State) => {
             let newState = {
@@ -79,7 +84,7 @@ export class Pace extends React.Component<Props, State> {
                 if(prevState.lockedInput == "time") {
                     newState['distance'] = newDistance
                     newState['pace'] = prevState['time'] / newDistance
-                } else if(prevState.lockedInput == "pace") {
+                } else if(prevState.lockedInput == "pace-speed") {
                     newState['distance'] = newDistance
                     newState['time'] = newDistance * prevState['pace']
                 }
@@ -131,6 +136,10 @@ export class Pace extends React.Component<Props, State> {
         return this.state.pace
     }
 
+    get speedTotal(): number {
+        return this.state.distance / (this.state.time / 3600);
+    }
+
     get distanceTotal(): number {
         return this.state.distance
     }
@@ -152,6 +161,7 @@ export class Pace extends React.Component<Props, State> {
             <div className="content">
                 {this.renderWorldRecordsModal()}
                 <h1>Running Pace Calculator</h1>
+
                 <div className="block">
                     <Lock state={this.state.lockedInput == "distance"}
                           onClick={this.onLockClickHandler("distance")}
@@ -189,20 +199,31 @@ export class Pace extends React.Component<Props, State> {
                     />
                 </div>
                 <div className="block">
-                    <Lock state={this.state.lockedInput == "pace"}
-                          onClick={this.onLockClickHandler("pace")}
+                    <Lock state={this.state.lockedInput == "pace-speed"}
+                          onClick={this.onLockClickHandler("pace-speed")}
                     />
                     <span className="label">Pace</span>
                     <Minutes time={this.paceTotal}
-                             isLocked={this.state.lockedInput == "pace"}
+                             isLocked={this.state.lockedInput == "pace-speed"}
                              onValueChangeHandler={this.changePaceHandler}
                     />
                     <span className="separator">:</span>
                     <Seconds time={this.paceTotal}
-                             isLocked={this.state.lockedInput == "pace"}
+                             isLocked={this.state.lockedInput == "pace-speed"}
                              onValueChangeHandler={this.changePaceHandler}
                     />
                     <span className="unit">min/km</span>
+                </div>
+                <div className="block">
+                    <Lock state={this.state.lockedInput == "pace-speed"}
+                          onClick={this.onLockClickHandler("pace-speed")}
+                    />
+                    <span className="label">Speed</span>
+                    <Speed speed={this.speedTotal}
+                           isLocked={this.state.lockedInput == "pace-speed"}
+                           onValueChangeHandler={this.changeSpeedHandler}
+                    />
+                    <span className="unit">km/h</span>
                 </div>
             </div>
         )
