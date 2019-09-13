@@ -8,12 +8,15 @@ import {Seconds} from "../component/Seconds"
 import {WorldRecords} from "../component/WorldRecords"
 import {Modal} from "../component/Modal"
 import {Speed} from "../component/Speed"
+import {ToggleButton} from "../component/ToggleButton"
 
 type State = Readonly<typeof initialState>
 
 type Props = Readonly<{}>
 
 type LockedInput = "time" | "pace-speed" | "distance"
+
+type DistanceUnit = "km" | "mi"
 
 // official world half-marathon record
 const defaultTime: number = (58 * 60) + 23
@@ -24,7 +27,8 @@ const initialState = {
     pace: defaultTime / defaultDistance, // seconds/km
     distance: defaultDistance, //km
     lockedInput: "distance" as LockedInput,
-    showWorldRecordsModal: false ,
+    showWorldRecordsModal: false,
+    distanceUnit: "km" as DistanceUnit,
 }
 
 export class Pace extends React.Component<Props, State> {
@@ -104,6 +108,34 @@ export class Pace extends React.Component<Props, State> {
         }
     }
 
+    convertMilesToKilometres = (distance: number) => {
+        return distance * 1.609344;
+    }
+
+    convertKilometersToMiles = (distance: number) => {
+        return distance / 1.609344;
+    }
+
+    onChangeDistanceUnit = () => {
+        this.setState((prevState: State) => {
+            let newState = {
+                ...prevState
+            }
+
+            if(prevState.distanceUnit == 'km') {
+                newState['distance'] = this.convertKilometersToMiles(prevState.distance);
+                newState['distanceUnit'] = 'mi';
+            } else {
+                newState['distance'] = this.convertMilesToKilometres(prevState.distance);
+                newState['distanceUnit'] = 'km';
+            }
+
+            newState['pace'] = newState.time / newState.distance;
+
+            return newState;
+        });
+    }
+
     closeWorldRecordsModalWindow = () => {
         this.setState({
             showWorldRecordsModal: false
@@ -120,6 +152,10 @@ export class Pace extends React.Component<Props, State> {
 
     setTimeAndDistance = (distance: number, time: number) => {
         this.closeWorldRecordsModalWindow()
+
+        if(this.state.distanceUnit == 'mi') {
+            distance = this.convertKilometersToMiles(distance);
+        }
 
         this.setState({
             time: time,
@@ -145,8 +181,6 @@ export class Pace extends React.Component<Props, State> {
     }
 
     renderWorldRecordsModal = () => {
-
-
         if(this.state.showWorldRecordsModal) {
             return (
                 <Modal onCloseHandler={this.closeWorldRecordsModalWindow}>
@@ -162,6 +196,12 @@ export class Pace extends React.Component<Props, State> {
                 {this.renderWorldRecordsModal()}
                 <h1>Running Pace Calculator</h1>
 
+                <ToggleButton leftText="km"
+                              rightText="mi"
+                              isChecked={this.state.distanceUnit == 'mi'}
+                              onValueChange={this.onChangeDistanceUnit}
+                />
+
                 <div className="block">
                     <Lock state={this.state.lockedInput == "distance"}
                           onClick={this.onLockClickHandler("distance")}
@@ -171,7 +211,7 @@ export class Pace extends React.Component<Props, State> {
                               isLocked={this.state.lockedInput == "distance"}
                               onValueChangeHandler={this.changeDistanceHandler}
                     />
-                    <span className="unit">km</span>
+                    <span className="unit">{this.state.distanceUnit == 'km' ? 'km' : 'mi'}</span>
                     <a href="#"
                        className="world-records-link"
                        onClick={this.showWorldRecords}
@@ -212,7 +252,7 @@ export class Pace extends React.Component<Props, State> {
                              isLocked={this.state.lockedInput == "pace-speed"}
                              onValueChangeHandler={this.changePaceHandler}
                     />
-                    <span className="unit">min/km</span>
+                    <span className="unit">{this.state.distanceUnit == 'km' ? 'min/km' : 'min/mi'}</span>
                 </div>
                 <div className="block">
                     <Lock state={this.state.lockedInput == "pace-speed"}
@@ -223,7 +263,7 @@ export class Pace extends React.Component<Props, State> {
                            isLocked={this.state.lockedInput == "pace-speed"}
                            onValueChangeHandler={this.changeSpeedHandler}
                     />
-                    <span className="unit">km/h</span>
+                    <span className="unit">{this.state.distanceUnit == 'km' ? 'km/h' : 'mi/h'}</span>
                 </div>
             </div>
         )
