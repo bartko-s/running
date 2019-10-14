@@ -133,14 +133,14 @@
     },
     {
         "distance": 42.195,
-        "time": 8125,
-        "location_abbr": "GBR",
-        "location": "Great Britain",
-        "data": 2003,
+        "time": 8044,
+        "location_abbr": "USA",
+        "location": "Chicago",
+        "data": 2019,
         "gender": "female",
-        "name": "Paula Radcliffe",
-        "nationality": "Great Britain",
-        "nationality_abbr": "GBR"
+        "name": "Brigid Kosgei",
+        "nationality": "Kenya",
+        "nationality_abbr": "KEN"
 
     }
 ]
