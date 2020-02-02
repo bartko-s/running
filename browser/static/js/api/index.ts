@@ -1,4 +1,4 @@
-import {AxiosPromise, default as Axios} from "axios"
+import {AxiosResponse, default as Axios} from "axios"
 
 type AthleteType = {
     distance: number
@@ -12,6 +12,6 @@ type AthleteType = {
     nationality_abbr: string
 }
 
-export const getAthletes = (): AxiosPromise<AthleteType[]> => {
-    return Axios.get("/api/athletes.json")
+export const getAthletes = async (): Promise<AxiosResponse<AthleteType[]>> => {
+    return await Axios.get("/api/athletes.json")
 }

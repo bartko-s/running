@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ReactNode} from 'react';
+import {useEffect, useState} from 'react';
 import {Lock} from "../component/Lock"
 import {Distance} from "../component/Distance"
 import {Hours} from "../component/Hours"
@@ -10,262 +10,212 @@ import {Modal} from "../component/Modal"
 import {Speed} from "../component/Speed"
 import {ToggleButton} from "../component/ToggleButton"
 
-type State = Readonly<typeof initialState>
-
-type Props = Readonly<{}>
-
 type LockedInput = "time" | "pace-speed" | "distance"
-
 type DistanceUnit = "km" | "mi"
 
 // official world half-marathon record
 const defaultTime: number = (58 * 60) + 23
 const defaultDistance: number = 21.1
 
-const initialState = {
-    time: defaultTime, //seconds
-    pace: defaultTime / defaultDistance, // seconds/km
-    distance: defaultDistance, //km
-    lockedInput: "distance" as LockedInput,
-    showWorldRecordsModal: false,
-    distanceUnit: "km" as DistanceUnit,
-}
+export const Pace = () => {
+    const [time, setTime] = useState(defaultTime); //seconds
+    const [pace, setPace] = useState(defaultTime / defaultDistance); //seconds/km
+    const [distance, setDistance] = useState(defaultDistance); //km
+    const [lockedInput, setLockedInput] = useState("distance" as LockedInput);
+    const [showWorldRecordModal, setShowWordRecordModal] = useState(false);
+    const [distanceUnit, setDistanceUnit] = useState("km" as DistanceUnit);
 
-export class Pace extends React.Component<Props, State> {
-    readonly state: State = initialState;
+    useEffect(() => {
+        if(lockedInput == "distance") {
+            setPace(time / distance)
+        } else if(lockedInput == "pace-speed") {
+            setDistance(time / pace)
+        }
+    }, [time])
 
-    changeTimeHandler = (newTime: number) => {
-        this.setState((prevState: State) => {
-            let newState = {
-                ...prevState
-            }
+    useEffect(() => {
+        if(lockedInput == "time") {
+            setDistance(time / pace)
+        } else if(lockedInput == "distance") {
+            setTime(pace * distance)
+        }
+    }, [pace])
 
-            if(newTime > 0) {
-                if(prevState.lockedInput == "distance") {
-                    newState['time'] = newTime
-                    newState['pace'] = newTime / prevState['distance']
-                } else if(prevState.lockedInput == "pace-speed") {
-                    newState['time'] = newTime
-                    newState['distance'] = newTime / prevState['pace']
-                }
-            }
+    useEffect(() => {
+        if(lockedInput == "time") {
+            setPace(time / distance)
+        } else if(lockedInput == "pace-speed") {
+            setTime(distance * pace)
+        }
+    }, [distance])
 
-            return newState
-        })
-    }
-
-    changePaceHandler = (newPace: number) => {
-        this.setState((prevState: State) => {
-            let newState = {
-                ...prevState
-            }
-
-            if(newPace > 0) {
-                if(prevState.lockedInput == "time") {
-                    newState['pace'] = newPace
-                    newState['distance'] = prevState['time'] / newPace
-                } else if(prevState.lockedInput == "distance") {
-                    newState['pace'] = newPace
-                    newState['time'] = newPace * prevState['distance']
-                }
-            }
-
-            return newState
-        })
-    }
-
-    changeSpeedHandler = (newSpeed: number) => {
-        this.changePaceHandler(3600 / newSpeed);
-    }
-
-    changeDistanceHandler = (newDistance: number) => {
-        this.setState((prevState: State) => {
-            let newState = {
-                ...prevState
-            }
-
-            if(newDistance > 0) {
-                if(prevState.lockedInput == "time") {
-                    newState['distance'] = newDistance
-                    newState['pace'] = prevState['time'] / newDistance
-                } else if(prevState.lockedInput == "pace-speed") {
-                    newState['distance'] = newDistance
-                    newState['time'] = newDistance * prevState['pace']
-                }
-            }
-
-            return newState
-        })
-    }
-
-    onLockClickHandler = (type: LockedInput): () => void => {
-        return () => {
-            this.setState(
-                {
-                    lockedInput: type
-                }
-            )
+    const changeTimeHandler = (newTime: number) => {
+        if (newTime > 0) {
+            setTime(newTime);
         }
     }
 
-    convertMilesToKilometres = (distance: number) => {
+    const changePaceHandler = (newPace: number) => {
+        if(newPace > 0) {
+            setPace(newPace);
+        }
+    }
+
+    const changeSpeedHandler = (newSpeed: number) => {
+        changePaceHandler(3600 / newSpeed);
+    }
+
+    const changeDistanceHandler = (newDistance: number) => {
+        if(newDistance > 0) {
+            setDistance(newDistance)
+        }
+    }
+
+    const onLockClickHandler = (type: LockedInput): () => void => {
+        return () => {
+            setLockedInput(type)
+        }
+    }
+
+    const convertMilesToKilometres = (distance: number) => {
         return distance * 1.609344;
     }
 
-    convertKilometersToMiles = (distance: number) => {
+    const convertKilometersToMiles = (distance: number) => {
         return distance / 1.609344;
     }
 
-    onChangeDistanceUnit = () => {
-        this.setState((prevState: State) => {
-            let newState = {
-                ...prevState
-            }
-
-            if(prevState.distanceUnit == 'km') {
-                newState['distance'] = this.convertKilometersToMiles(prevState.distance);
-                newState['distanceUnit'] = 'mi';
-            } else {
-                newState['distance'] = this.convertMilesToKilometres(prevState.distance);
-                newState['distanceUnit'] = 'km';
-            }
-
-            newState['pace'] = newState.time / newState.distance;
-
-            return newState;
-        });
+    const onChangeDistanceUnit = () => {
+        if(distanceUnit == 'km') {
+            setDistanceUnit('mi')
+            setDistance(convertKilometersToMiles(distance))
+        } else {
+            setDistanceUnit('km')
+            setDistance(convertMilesToKilometres(distance))
+        }
     }
 
-    closeWorldRecordsModalWindow = () => {
-        this.setState({
-            showWorldRecordsModal: false
-        })
+    const closeWorldRecordsModalWindow = () => {
+        setShowWordRecordModal(false);
     }
 
-    showWorldRecords = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const showWorldRecords = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
-
-        this.setState({
-            showWorldRecordsModal: true
-        })
+        setShowWordRecordModal(true);
     }
 
-    setTimeAndDistance = (distance: number, time: number) => {
-        this.closeWorldRecordsModalWindow()
+    const setTimeAndDistance = (distance: number, time: number) => {
+       closeWorldRecordsModalWindow()
 
-        if(this.state.distanceUnit == 'mi') {
-            distance = this.convertKilometersToMiles(distance);
+        if(distanceUnit == 'mi') {
+            distance = convertKilometersToMiles(distance);
         }
 
-        this.setState({
-            time: time,
-            distance: distance,
-            pace: time / distance,
-        })
+        setTime(time);
+        setDistance(distance);
+        setPace(time / distance);
     }
 
-    get timeTotal(): number {
-        return this.state.time
+    const timeTotal = (): number => {
+        return time
     }
 
-    get paceTotal(): number {
-        return this.state.pace
+    const paceTotal = (): number => {
+        return pace
     }
 
-    get speedTotal(): number {
-        return this.state.distance / (this.state.time / 3600);
+    const speedTotal = (): number => {
+        return distance / (time / 3600);
     }
 
-    get distanceTotal(): number {
-        return this.state.distance
+    const distanceTotal = (): number => {
+        return distance
     }
 
-    renderWorldRecordsModal = () => {
-        if(this.state.showWorldRecordsModal) {
+    const renderWorldRecordsModal = () => {
+        if (showWorldRecordModal) {
             return (
-                <Modal onCloseHandler={this.closeWorldRecordsModalWindow}>
-                    <WorldRecords onPickRecordHandler={this.setTimeAndDistance}/>
+                <Modal onCloseHandler={closeWorldRecordsModalWindow}>
+                    <WorldRecords onPickRecordHandler={setTimeAndDistance}/>
                 </Modal>
-            )
+            );
         }
     }
 
-    render(): ReactNode {
-        return (
-            <div className="content">
-                {this.renderWorldRecordsModal()}
-                <h1>Running Pace Calculator</h1>
+    return (
+        <div className="content">
+             {renderWorldRecordsModal()}
+             <h1>Running Pace Calculator</h1>
 
-                <ToggleButton leftText="km"
-                              rightText="mi"
-                              isChecked={this.state.distanceUnit == 'mi'}
-                              onValueChange={this.onChangeDistanceUnit}
-                />
+             <ToggleButton leftText="km"
+                           rightText="mi"
+                           isChecked={distanceUnit == 'mi'}
+                           onValueChange={onChangeDistanceUnit}
+             />
 
-                <div className="block">
-                    <Lock state={this.state.lockedInput == "distance"}
-                          onClick={this.onLockClickHandler("distance")}
-                    />
-                    <span className="label">Distance</span>
-                    <Distance distance={this.distanceTotal}
-                              isLocked={this.state.lockedInput == "distance"}
-                              onValueChangeHandler={this.changeDistanceHandler}
-                    />
-                    <span className="unit">{this.state.distanceUnit == 'km' ? 'km' : 'mi'}</span>
-                    <a href="#"
-                       className="world-records-link"
-                       onClick={this.showWorldRecords}
-                       title="Show world records"
-                    >World Records</a>
-                </div>
-                <div className="block">
-                    <Lock state={this.state.lockedInput == "time"}
-                          onClick={this.onLockClickHandler("time")}
-                    />
-                    <span className="label">Time</span>
-                    <Hours time={this.timeTotal}
-                           isLocked={this.state.lockedInput == "time"}
-                           onValueChangeHandler={this.changeTimeHandler}
-                    />
-                    <span className="separator">:</span>
-                    <Minutes time={this.timeTotal}
-                             isLocked={this.state.lockedInput == "time"}
-                             onValueChangeHandler={this.changeTimeHandler}
-                    />
-                    <span className="separator">:</span>
-                    <Seconds time={this.timeTotal}
-                             isLocked={this.state.lockedInput == "time"}
-                             onValueChangeHandler={this.changeTimeHandler}
-                    />
-                </div>
-                <div className="block">
-                    <Lock state={this.state.lockedInput == "pace-speed"}
-                          onClick={this.onLockClickHandler("pace-speed")}
-                    />
-                    <span className="label">Pace</span>
-                    <Minutes time={this.paceTotal}
-                             isLocked={this.state.lockedInput == "pace-speed"}
-                             onValueChangeHandler={this.changePaceHandler}
-                    />
-                    <span className="separator">:</span>
-                    <Seconds time={this.paceTotal}
-                             isLocked={this.state.lockedInput == "pace-speed"}
-                             onValueChangeHandler={this.changePaceHandler}
-                    />
-                    <span className="unit">{this.state.distanceUnit == 'km' ? 'min/km' : 'min/mi'}</span>
-                </div>
-                <div className="block">
-                    <Lock state={this.state.lockedInput == "pace-speed"}
-                          onClick={this.onLockClickHandler("pace-speed")}
-                    />
-                    <span className="label">Speed</span>
-                    <Speed speed={this.speedTotal}
-                           isLocked={this.state.lockedInput == "pace-speed"}
-                           onValueChangeHandler={this.changeSpeedHandler}
-                    />
-                    <span className="unit">{this.state.distanceUnit == 'km' ? 'km/h' : 'mi/h'}</span>
-                </div>
-            </div>
-        )
-    }
+             <div className="block">
+                 <Lock state={lockedInput == "distance"}
+                       onClick={onLockClickHandler("distance")}
+                 />
+                 <span className="label">Distance</span>
+                 <Distance distance={distanceTotal()}
+                           isLocked={lockedInput == "distance"}
+                           onValueChangeHandler={changeDistanceHandler}
+                 />
+                 <span className="unit">{distanceUnit == 'km' ? 'km' : 'mi'}</span>
+                 <a href="#"
+                    className="world-records-link"
+                    onClick={showWorldRecords}
+                    title="Show world records"
+                 >World Records</a>
+             </div>
+             <div className="block">
+                 <Lock state={lockedInput == "time"}
+                       onClick={onLockClickHandler("time")}
+                 />
+                 <span className="label">Time</span>
+                 <Hours time={timeTotal()}
+                        isLocked={lockedInput == "time"}
+                        onValueChangeHandler={changeTimeHandler}
+                 />
+                 <span className="separator">:</span>
+                 <Minutes time={timeTotal()}
+                          isLocked={lockedInput == "time"}
+                          onValueChangeHandler={changeTimeHandler}
+                 />
+                 <span className="separator">:</span>
+                 <Seconds time={timeTotal()}
+                          isLocked={lockedInput == "time"}
+                          onValueChangeHandler={changeTimeHandler}
+                 />
+             </div>
+             <div className="block">
+                 <Lock state={lockedInput == "pace-speed"}
+                       onClick={onLockClickHandler("pace-speed")}
+                 />
+                 <span className="label">Pace</span>
+                 <Minutes time={paceTotal()}
+                          isLocked={lockedInput == "pace-speed"}
+                          onValueChangeHandler={changePaceHandler}
+                 />
+                 <span className="separator">:</span>
+                 <Seconds time={paceTotal()}
+                          isLocked={lockedInput == "pace-speed"}
+                          onValueChangeHandler={changePaceHandler}
+                 />
+                 <span className="unit">{distanceUnit == 'km' ? 'min/km' : 'min/mi'}</span>
+             </div>
+             <div className="block">
+                 <Lock state={lockedInput == "pace-speed"}
+                       onClick={onLockClickHandler("pace-speed")}
+                 />
+                 <span className="label">Speed</span>
+                 <Speed speed={speedTotal()}
+                        isLocked={lockedInput == "pace-speed"}
+                        onValueChangeHandler={changeSpeedHandler}
+                 />
+                 <span className="unit">{distanceUnit == 'km' ? 'km/h' : 'mi/h'}</span>
+             </div>
+        </div>
+    )
 }

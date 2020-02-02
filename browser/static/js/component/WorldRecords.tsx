@@ -1,13 +1,11 @@
 import * as React from 'react';
-import {ReactNode} from 'react';
+import {useEffect, useState} from 'react';
 import {getAthletes} from "../api"
 import {secondsToFullTime} from "../utilities"
 
 type Props = Readonly<{
     onPickRecordHandler: (distance: number, time: number) => void
 }>
-
-type State = Readonly<typeof initialState>
 
 const initialState = {
     athletes: [] as Array<{
@@ -24,26 +22,24 @@ const initialState = {
     loading: true
 }
 
-export class WorldRecords extends React.Component<Props, State> {
-    readonly state: State = initialState;
+export const WorldRecords = (props: Props) => {
+    const [loading, setLoading] = useState(initialState.loading);
+    const [athletes, setAthletes] = useState(initialState.athletes);
 
-    componentDidMount(): void {
-        const self = this;
+    useEffect( () => {
+        (async () => {
+            const result = await getAthletes();
+            setAthletes(result.data);
+            setLoading(false);
+        })()
+    }, []);
 
-        getAthletes().then((response) => {
-            self.setState({
-                athletes: response.data,
-                loading: false
-            })
-        })
-    }
-
-    renderRecords = () => {
-        if(this.state.loading) {
+    const renderRecords = () => {
+        if(loading) {
             return '...loading'
         }
 
-        return this.state.athletes.map((item) => {
+        return athletes.map((item) => {
             return (
                 <div className="world-record__item"
                      key={item.time + item.gender + item.distance}
@@ -72,7 +68,7 @@ export class WorldRecords extends React.Component<Props, State> {
                         </div>
                     </div>
                     <div className="world-record__pick">
-                        <button onClick={() => {this.props.onPickRecordHandler(item.distance, item.time)}}
+                        <button onClick={() => {props.onPickRecordHandler(item.distance, item.time)}}
                                 className="button"
                         >Pick</button>
                     </div>
@@ -81,12 +77,10 @@ export class WorldRecords extends React.Component<Props, State> {
         })
     }
 
-    render(): ReactNode {
-        return (
-            <>
-                <h1>World Records</h1>
-                {this.renderRecords()}
-            </>
-        )
-    }
+    return (
+        <>
+            <h1>World Records</h1>
+            {renderRecords()}
+        </>
+    )
 }

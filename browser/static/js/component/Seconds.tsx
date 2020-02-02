@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {ReactNode} from 'react';
 import {NumberInput} from "./NumberInput"
 import {formatTimeDigits} from "../utilities"
 
@@ -9,26 +8,27 @@ type Props = Readonly<{
     onValueChangeHandler: (val: number) => void
 }>
 
-export class Seconds extends React.Component<Props, {}> {
-    get value(): number {
-        const time = this.props.time
-        const h = Math.floor(time / 3600)
-        const m = Math.floor((time - (h * 3600)) / 60)
-        return Math.round(time - (h * 3600) - (m * 60))
+export const Seconds = (props: Props) => {
+    const valueChangeHandler = (seconds: number) => {
+        props.onValueChangeHandler(setNewSecondsPart(seconds, props.time))
     }
 
-    valueChangeHandler = (val: number) => {
-        const newVal = (Math.floor(this.props.time / 60) * 60) + val
-        this.props.onValueChangeHandler(newVal)
-    }
+    return (
+        <NumberInput value={extractSecondsPart(props.time)}
+                     isLocked={props.isLocked}
+                     onValueChange={valueChangeHandler}
+                     valueFormatter={formatTimeDigits}
+        />
+    )
+}
 
-    render(): ReactNode {
-        return (
-            <NumberInput value={this.value}
-                         isLocked={this.props.isLocked}
-                         onValueChange={this.valueChangeHandler}
-                         valueFormatter={formatTimeDigits}
-            />
-        )
-    }
+const extractSecondsPart = (totalTimeInSeconds: number): number => {
+    const time = totalTimeInSeconds
+    const h = Math.floor(time / 3600)
+    const m = Math.floor((time - (h * 3600)) / 60)
+    return Math.round(time - (h * 3600) - (m * 60))
+}
+
+const setNewSecondsPart = (seconds: number, oldTimeInSeconds: number): number => {
+    return (Math.floor(oldTimeInSeconds / 60) * 60) + seconds
 }
