@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {useEffect, useState} from 'react';
 import {Lock} from "../component/Lock"
 import {Distance} from "../component/Distance"

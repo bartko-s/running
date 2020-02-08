@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {ReactNode, useRef} from 'react';
 import useClickOutside from "use-click-outside"
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {NumberInput} from "./NumberInput"
 import {formatTimeDigits} from "../utilities"
 
