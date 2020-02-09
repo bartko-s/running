@@ -22,7 +22,7 @@ const initialState = {
     loading: true
 }
 
-export const WorldRecords = (props: Props) => {
+export function WorldRecords(props: Props) {
     const [loading, setLoading] = useState(initialState.loading);
     const [athletes, setAthletes] = useState(initialState.athletes);
 
@@ -34,7 +34,7 @@ export const WorldRecords = (props: Props) => {
         })()
     }, []);
 
-    const renderRecords = () => {
+    function renderRecords() {
         if(loading) {
             return '...loading'
         }

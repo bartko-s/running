@@ -5,7 +5,7 @@ type Props = Readonly<{
     state: boolean
 }>
 
-export const Lock = (props: Props) => {
+export function Lock(props: Props) {
     const state = props.state ? "Locked" : "Lock"
     const stateClass = props.state ? "lock lock--locked" : "lock lock--unlocked"
     const title = props.state ? "" : "Lock"

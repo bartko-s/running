@@ -7,7 +7,7 @@ type Props = Readonly<{
     onValueChange: () => void,
 }>
 
-export const ToggleButton = (props: Props) => {
+export function ToggleButton(props: Props) {
     return (
         <div className="toggle-button">
             <input type="checkbox"

@@ -7,7 +7,7 @@ type Props = Readonly<{
     children: ReactNode,
 }>
 
-export const Modal = (props: Props) => {
+export function Modal(props: Props) {
     const ref = useRef<any>();
     useClickOutside(ref, props.onCloseHandler);
 

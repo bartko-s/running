@@ -13,7 +13,7 @@ const defaultProps = {
     extraClass: '',
 }
 
-export const NumberInput = (props: Props) =>  {
+export function NumberInput(props: Props) {
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const inputEl = useRef<HTMLInputElement>(null);
 
@@ -23,23 +23,23 @@ export const NumberInput = (props: Props) =>  {
         }
     })
 
-    const valueChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    function valueChangeHandler(e: React.FormEvent<HTMLInputElement>) {
         const value = e.currentTarget.value
         props.onValueChange(Number(value))
     }
 
-    const focusHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+    function focusHandler(e: React.FocusEvent<HTMLInputElement>) {
         e.persist();
         setIsFocused(true);
     }
 
-    const blurHandler = () => {
+    function blurHandler() {
         setIsFocused(false)
     }
 
-    const wheelHandler = () => {}
+    function wheelHandler() {}
 
-    const getValue = (): string => {
+    function getValue(): string {
         if(props.valueFormatter != undefined && !isFocused) {
             return props.valueFormatter(props.value)
         } else {
@@ -47,7 +47,7 @@ export const NumberInput = (props: Props) =>  {
         }
     }
 
-    const renderInput = () => {
+    function renderInput() {
         if(props.isLocked) {
             return <span className="input__value">{getValue()}</span>
         } else {

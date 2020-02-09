@@ -1,4 +1,4 @@
-export const formatTimeDigits = (val: number): string => {
+export function formatTimeDigits(val: number): string {
     if(val <= 9) {
         return "0" + val.toString()
     } else {
@@ -6,7 +6,7 @@ export const formatTimeDigits = (val: number): string => {
     }
 }
 
-export const secondsToFullTime = (time: number): string => {
+export function secondsToFullTime(time: number): string {
     const hours = Math.floor(time / 3600)
     const minutes = Math.floor((time - (hours * 3600)) / 60)
     const seconds = Math.round((time - (minutes * 60) - (hours * 3600)) * 100) / 100

@@ -17,7 +17,7 @@ type DistanceUnit = "km" | "mi"
 const defaultTime: number = (58 * 60) + 23
 const defaultDistance: number = 21.1
 
-export const Pace = () => {
+export function Pace() {
     const [time, setTime] = useState(defaultTime); //seconds
     const [pace, setPace] = useState(defaultTime / defaultDistance); //seconds/km
     const [distance, setDistance] = useState(defaultDistance); //km
@@ -49,43 +49,43 @@ export const Pace = () => {
         }
     }, [distance])
 
-    const changeTimeHandler = (newTime: number) => {
+    function changeTimeHandler(newTime: number) {
         if (newTime > 0) {
             setTime(newTime);
         }
     }
 
-    const changePaceHandler = (newPace: number) => {
+    function changePaceHandler(newPace: number) {
         if(newPace > 0) {
             setPace(newPace);
         }
     }
 
-    const changeSpeedHandler = (newSpeed: number) => {
+    function changeSpeedHandler(newSpeed: number) {
         changePaceHandler(3600 / newSpeed);
     }
 
-    const changeDistanceHandler = (newDistance: number) => {
+    function changeDistanceHandler(newDistance: number) {
         if(newDistance > 0) {
             setDistance(newDistance)
         }
     }
 
-    const onLockClickHandler = (type: LockedInput): () => void => {
+    function onLockClickHandler(type: LockedInput): () => void {
         return () => {
             setLockedInput(type)
         }
     }
 
-    const convertMilesToKilometres = (distance: number) => {
+    function convertMilesToKilometres(distance: number) {
         return distance * 1.609344;
     }
 
-    const convertKilometersToMiles = (distance: number) => {
+    function convertKilometersToMiles(distance: number) {
         return distance / 1.609344;
     }
 
-    const onChangeDistanceUnit = () => {
+    function onChangeDistanceUnit() {
         if(distanceUnit == 'km') {
             setDistanceUnit('mi')
             setDistance(convertKilometersToMiles(distance))
@@ -95,16 +95,16 @@ export const Pace = () => {
         }
     }
 
-    const closeWorldRecordsModalWindow = () => {
+    function closeWorldRecordsModalWindow() {
         setShowWordRecordModal(false);
     }
 
-    const showWorldRecords = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    function showWorldRecords(e: React.MouseEvent<HTMLAnchorElement>) {
         e.preventDefault();
         setShowWordRecordModal(true);
     }
 
-    const setTimeAndDistance = (distance: number, time: number) => {
+    function setTimeAndDistance(distance: number, time: number) {
        closeWorldRecordsModalWindow()
 
         if(distanceUnit == 'mi') {
@@ -116,23 +116,23 @@ export const Pace = () => {
         setPace(time / distance);
     }
 
-    const timeTotal = (): number => {
+    function timeTotal(): number {
         return time
     }
 
-    const paceTotal = (): number => {
+    function paceTotal(): number {
         return pace
     }
 
-    const speedTotal = (): number => {
+    function speedTotal(): number {
         return distance / (time / 3600);
     }
 
-    const distanceTotal = (): number => {
+    function distanceTotal(): number {
         return distance
     }
 
-    const renderWorldRecordsModal = () => {
+    function renderWorldRecordsModal() {
         if (showWorldRecordModal) {
             return (
                 <Modal onCloseHandler={closeWorldRecordsModalWindow}>

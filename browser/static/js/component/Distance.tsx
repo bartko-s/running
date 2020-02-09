@@ -7,7 +7,7 @@ type Props = Readonly<{
     onValueChangeHandler: (val: number) => void
 }>
 
-export const Distance = (props: Props) => {
+export function Distance(props: Props) {
     return (
         <NumberInput value={Number(props.distance.toFixed(2))}
                      isLocked={props.isLocked}
@@ -19,6 +19,6 @@ export const Distance = (props: Props) => {
     )
 }
 
-const valueFormatter = (val: number): string => {
+function valueFormatter(val: number): string {
     return val.toFixed(2)
 }

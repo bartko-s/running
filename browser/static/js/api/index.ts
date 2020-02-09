@@ -12,6 +12,6 @@ type AthleteType = {
     nationality_abbr: string
 }
 
-export const getAthletes = async (): Promise<AxiosResponse<AthleteType[]>> => {
+export async function getAthletes(): Promise<AxiosResponse<AthleteType[]>> {
     return await Axios.get("/api/athletes.json")
 }

@@ -8,8 +8,8 @@ type Props = Readonly<{
     onValueChangeHandler: (val: number) => void
 }>
 
-export const Hours = (props: Props) => {
-    const valueChangeHandler = (hours: number) => {
+export function Hours(props: Props) {
+    function valueChangeHandler(hours: number) {
         props.onValueChangeHandler(setNewHoursPart(hours, props.time))
     }
 
@@ -22,11 +22,11 @@ export const Hours = (props: Props) => {
     )
 }
 
-const extractHoursPart = (totalTimeInSeconds: number): number => {
+function extractHoursPart(totalTimeInSeconds: number): number {
     return Math.floor(totalTimeInSeconds / 3600)
 }
 
-const setNewHoursPart = (hours: number, oldTimeInSeconds: number): number => {
+function setNewHoursPart(hours: number, oldTimeInSeconds: number): number {
     const oldHours = Math.floor(oldTimeInSeconds / 3600)
     const minutes = Math.floor((oldTimeInSeconds - (oldHours * 3600)) / 60)
     const seconds = oldTimeInSeconds - (Math.floor(oldTimeInSeconds / 60) * 60)
