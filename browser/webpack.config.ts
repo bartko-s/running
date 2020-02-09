@@ -1,10 +1,10 @@
 import * as path from 'path'
 import * as webpack from 'webpack'
 import * as webpackDevServer from 'webpack-dev-server'
-import * as MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import * as autoprefixer from 'autoprefixer'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import autoprefixer from 'autoprefixer'
 import {CleanWebpackPlugin} from 'clean-webpack-plugin'
-import * as cssnano from 'cssnano'
+import cssnano from 'cssnano'
 
 const protocol: 'https' | 'http' = 'http';
 const serverUrl: string = '0.0.0.0';
@@ -47,12 +47,7 @@ function buildConfig(isDevelopment: boolean): webpack.Configuration & webpackDev
                 {
                     test: /\.(t|j)sx?$/,
                     exclude: /node_modules/,
-                    use : ['awesome-typescript-loader?module=es6']
-                },
-                {
-                    test: /\.js$/,
-                    loader: 'source-map-loader',
-                    enforce: 'pre'
+                    loader : 'ts-loader'
                 },
                 {
                     test: /\.(css|scss)$/,

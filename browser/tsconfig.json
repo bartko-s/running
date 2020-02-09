@@ -9,6 +9,8 @@
         "moduleResolution": "node",
         "lib": ["es2015", "dom"],
         "strict": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "esModuleInterop": true
     }
 }
