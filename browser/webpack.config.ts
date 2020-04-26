@@ -19,7 +19,9 @@ function postCssLoader(isDevelopment: boolean): webpack.Loader {
         options: {
             sourceMap: isDevelopment,
             plugins: function () {
-                return [
+                return isDevelopment ? [
+                    autoprefixer()
+                ]: [
                     autoprefixer(),
                     cssnano()
                 ]
@@ -65,13 +67,15 @@ function buildConfig(isDevelopment: boolean): webpack.Configuration & webpackDev
                         ]
                 },
                 {
-                    test: /\.(gif|jpg|jpeg|png|woff|woff2|eot|ttf|svg)$/,
+                    test: /\.(gif|jpg|jpeg|png|svg)$/,
                     use: [{
-                        loader: 'url-loader',
-                        options: {
-                            limit: 5000,
-                            fallback: 'file-loader',
-                        }
+                        loader: 'file-loader',
+                    }]
+                },
+                {
+                    test: /\.(woff|woff2|eot|ttf|otf)$/,
+                    use: [{
+                        loader: 'file-loader',
                     }]
                 }
             ],
@@ -82,10 +86,11 @@ function buildConfig(isDevelopment: boolean): webpack.Configuration & webpackDev
             publicPath: isDevelopment ? protocol+'://'+serverUrl+':'+port+publicPath : publicPath
         },
         optimization: {
+            usedExports: true,
             splitChunks: {
                 cacheGroups: {
-                    commons: {
-                        test: /node_modules/,
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
                         name: "vendor",
                         chunks: "all",
                         enforce: true,
