@@ -97,26 +97,26 @@
     },
     {
         "distance": 21.0975,
-        "time": 3503,
-        "location_abbr": "POR",
-        "location": "Portugal",
-        "data": 2010,
+        "time": 3481,
+        "location_abbr": "DEN",
+        "location": "Denmark",
+        "data": 2019,
         "gender": "male",
-        "name": "Zersenay Tadese",
-        "nationality": "Eritrea",
-        "nationality_abbr": "ERI"
+        "name": "Geoffrey Kamworor",
+        "nationality": "Kenya",
+        "nationality_abbr": "KEN"
 
     },
     {
         "distance": 21.0975,
-        "time": 3891,
-        "location_abbr": "SPA",
-        "location": "Spain",
-        "data": 2017,
+        "time": 3871,
+        "location_abbr": "UAE",
+        "location": "United Arab Emirates",
+        "data": 2020,
         "gender": "female",
-        "name": "Joyciline Jepkosgei",
-        "nationality": "Kenya",
-        "nationality_abbr": "KEN"
+        "name": "Ababel Yeshaneh",
+        "nationality": "Ethiopia",
+        "nationality_abbr": "ETH"
 
     },
     {
