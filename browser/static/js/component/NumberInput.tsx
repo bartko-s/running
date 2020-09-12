@@ -25,6 +25,7 @@ export function NumberInput(props: Props) {
 
     function valueChangeHandler(e: React.FormEvent<HTMLInputElement>) {
         const value = e.currentTarget.value
+        setIsFocused(false);
         props.onValueChange(Number(value))
     }
 
