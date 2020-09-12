@@ -1,5 +1,5 @@
 import React from 'react';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {Lock} from "../component/Lock"
 import {Distance} from "../component/Distance"
 import {Hours} from "../component/Hours"
@@ -18,46 +18,29 @@ const defaultTime: number = (58 * 60) + 23
 const defaultDistance: number = 21.1
 
 export function Pace() {
-    const [time, setTime] = useState(defaultTime); //seconds
-    const [pace, setPace] = useState(defaultTime / defaultDistance); //seconds/km
-    const [distance, setDistance] = useState(defaultDistance); //km
-    const [lockedInput, setLockedInput] = useState("distance" as LockedInput);
-    const [showWorldRecordModal, setShowWordRecordModal] = useState(false);
-    const [distanceUnit, setDistanceUnit] = useState("km" as DistanceUnit);
-
-    useEffect(() => {
-        if(lockedInput == "distance") {
-            setPace(time / distance)
-        } else if(lockedInput == "pace-speed") {
-            setDistance(time / pace)
-        }
-    }, [time])
-
-    useEffect(() => {
-        if(lockedInput == "time") {
-            setDistance(time / pace)
-        } else if(lockedInput == "distance") {
-            setTime(pace * distance)
-        }
-    }, [pace])
-
-    useEffect(() => {
-        if(lockedInput == "time") {
-            setPace(time / distance)
-        } else if(lockedInput == "pace-speed") {
-            setTime(distance * pace)
-        }
-    }, [distance])
+    const [time, setTime] = useState<number>(defaultTime); //seconds
+    const [distance, setDistance] = useState<number>(defaultDistance); //km
+    const [lockedInput, setLockedInput] = useState<LockedInput>("distance");
+    const [showWorldRecordModal, setShowWordRecordModal] = useState<boolean>(false);
+    const [distanceUnit, setDistanceUnit] = useState<DistanceUnit>("km");
 
     function changeTimeHandler(newTime: number) {
-        if (newTime > 0) {
-            setTime(newTime);
+        if (newTime <= 0) {
+            return
         }
+
+        setTime(newTime);
     }
 
     function changePaceHandler(newPace: number) {
-        if(newPace > 0) {
-            setPace(newPace);
+        if(newPace <= 0) {
+            return
+        }
+
+        if (lockedInput == 'time') {
+            setDistance(time / newPace)
+        } else if (lockedInput == 'distance') {
+            setTime(distance * newPace)
         }
     }
 
@@ -113,7 +96,6 @@ export function Pace() {
 
         setTime(time);
         setDistance(distance);
-        setPace(time / distance);
     }
 
     function timeTotal(): number {
@@ -121,7 +103,7 @@ export function Pace() {
     }
 
     function paceTotal(): number {
-        return pace
+        return time / distance
     }
 
     function speedTotal(): number {
