@@ -8,14 +8,14 @@
     "last 2 versions"
   ],
   "devDependencies": {
-    "@hot-loader/react-dom": "16.13.0",
+    "@hot-loader/react-dom": "17.0.1",
     "@types/autoprefixer": "^9.7.2",
     "@types/cssnano": "^4.0.0",
     "@types/mini-css-extract-plugin": "^0.9.1",
     "@types/node": "^14.6.0",
-    "@types/react": "^16.9.47",
+    "@types/react": "^17.0.5",
     "@types/react-click-outside": "^3.0.3",
-    "@types/react-dom": "^16.9.8",
+    "@types/react-dom": "^17.0.4",
     "@types/webpack": "^4.41.21",
     "@types/webpack-dev-server": "^3.11.0",
     "autoprefixer": "^9.8.6",
@@ -26,7 +26,7 @@
     "mini-css-extract-plugin": "^0.10.0",
     "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
-    "react-hot-loader": "^4.12.21",
+    "react-hot-loader": "^4.13.0",
     "sass-loader": "^10.0.1",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.3",
@@ -37,11 +37,11 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "axios": "^0.20.0",
-    "bootstrap": "^4.5.2",
-    "react": "^16.13.1",
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "react": "^17.0.2",
     "react-click-outside": "^3.0.1",
-    "react-dom": "^16.13.1",
+    "react-dom": "^17.0.2",
     "use-click-outside": "^2.0.0"
   }
 }
