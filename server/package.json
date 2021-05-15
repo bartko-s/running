@@ -4,12 +4,24 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "run-server": "yarn install && node app.js",
+    "run-server": "yarn install && yarn run build && pm2 start pm2.config.js --no-daemon",
+    "run-dev-server": "yarn install && yarn run clean && ts-node-dev --respawn --transpile-only ./src/app.ts",
+    "build": "yarn run clean && yarn run copy-assets && tsc",
+    "clean": "rm -rf ./build/*",
+    "copy-assets": "cp -R ./src/views ./build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.7",
+    "@types/express-handlebars": "^3.1.0",
+    "http-proxy-middleware": "^2.0.0",
+    "ts-node-dev": "^1.0.0-pre.60",
+    "typescript": "^4.0.2"
   }
 }

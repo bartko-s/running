@@ -1,5 +1,8 @@
 version: '3.7'
 
 services:
+  node-server:
+    command: yarn --cwd "./server/" run-dev-server
+
   node-browser:
     command: yarn --cwd "./browser" dev

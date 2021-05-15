@@ -1,7 +1,6 @@
 import * as path from 'path'
 import * as webpack from 'webpack'
 import * as webpackDevServer from 'webpack-dev-server'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import autoprefixer from 'autoprefixer'
 import {CleanWebpackPlugin} from 'clean-webpack-plugin'
 import cssnano from 'cssnano'
@@ -12,16 +11,17 @@ const port: number = 8080;
 const publicPath: string = "/static/build/";
 const buildPath: string = path.join(__dirname, 'static/build');
 
+const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
 
-function postCssLoader(isDevelopment: boolean): webpack.Loader {
+function postCssLoader(isDevelopment: boolean): webpack.RuleSetUseItem {
     return {
         loader: 'postcss-loader',
         options: {
             sourceMap: isDevelopment,
-            plugins: function () {
-                return isDevelopment ? [
+            postcssOptions: {
+                plugins: isDevelopment ? [
                     autoprefixer()
-                ]: [
+                ] : [
                     autoprefixer(),
                     cssnano()
                 ]
@@ -34,9 +34,12 @@ function buildConfig(isDevelopment: boolean): webpack.Configuration & webpackDev
     return {
         mode: isDevelopment ? 'development' : 'production',
         cache: isDevelopment,
-        devtool: isDevelopment ? 'eval-source-map' : false,
+        devtool: isDevelopment ? 'inline-source-map' : false,
         entry: {
-            index: [path.join(__dirname, 'static/app.tsx')],
+            index: [
+                'react-hot-loader/patch',
+                path.join(__dirname, 'static/app.tsx')
+            ],
         },
         resolve: {
             extensions: ['*', '.ts', '.tsx', '.js', '.json', '.jsx'],
@@ -44,26 +47,82 @@ function buildConfig(isDevelopment: boolean): webpack.Configuration & webpackDev
                 'react-dom': isDevelopment ? '@hot-loader/react-dom': 'react-dom'
             }
         },
+        target: isDevelopment ? 'web' : 'browserslist', // upravit ked bude fix na https://github.com/webpack/webpack-dev-server/issues/2758
         module: {
             rules: [
                 {
                     test: /\.(t|j)sx?$/,
                     exclude: /node_modules/,
-                    loader : 'ts-loader'
+                    loader: "babel-loader",
+                    options: {
+                        "presets": [
+                            "@babel/preset-env",
+                            [
+                                "@babel/preset-react",
+                                {
+                                    development: isDevelopment,
+                                },
+                            ],
+                            "@babel/preset-typescript",
+                        ],
+                        "plugins": [
+                            "react-hot-loader/babel",
+                            "@babel/plugin-transform-runtime",
+                            "transform-class-properties",
+                            [
+                                "babel-plugin-styled-components",
+                                {
+                                    "displayName": isDevelopment,
+                                }
+                            ],
+                        ]
+                    }
                 },
                 {
-                    test: /\.(css|scss)$/,
+                    test: /\.(t|j)sx?$/,
+                    loader: 'source-map-loader',
+                    enforce: 'pre'
+                },
+                {
+                    test: /\.(css|scss|sass)$/,
                     use: isDevelopment ?
                         [
-                            'style-loader',
+                            {
+                                loader: ExtractCssChunks.loader,
+                                options: {
+                                    publicPath: publicPath,
+                                    hmr: true,
+                                    reloadAll: true,
+                                }
+                            },
                             {loader: 'css-loader', options: {sourceMap: true}},
                             postCssLoader(isDevelopment),
-                            {loader: 'sass-loader', options: {sourceMap: true}}]
-                        : [
-                            MiniCssExtractPlugin.loader,
+                            {
+                                loader: 'sass-loader',
+                                options: {
+                                    sourceMap: true,
+                                    sassOptions: {
+                                        outputStyle: 'compressed',
+                                    },
+                                }
+                            }
+                        ] : [
+                            {
+                                loader: ExtractCssChunks.loader,
+                                options: {
+                                    publicPath: publicPath,
+                                }
+                            },
                             {loader: 'css-loader'},
                             postCssLoader(isDevelopment),
-                            {loader: 'sass-loader'}
+                            {
+                                loader: 'sass-loader',
+                                options: {
+                                    sassOptions: {
+                                        outputStyle: 'compressed',
+                                    },
+                                }
+                            }
                         ]
                 },
                 {
@@ -82,42 +141,29 @@ function buildConfig(isDevelopment: boolean): webpack.Configuration & webpackDev
         },
         output: {
             filename: '[name].bundle.js',
+            chunkFilename: '[id].bundle.[chunkhash].js',
             path: buildPath,
             publicPath: isDevelopment ? protocol+'://'+serverUrl+':'+port+publicPath : publicPath
-        },
-        optimization: {
-            usedExports: true,
-            splitChunks: {
-                cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name: "vendor",
-                        chunks: "all",
-                        enforce: true,
-                    }
-                }
-            }
         },
         plugins: isDevelopment ?
             [
                 new CleanWebpackPlugin(),
                 new webpack.HotModuleReplacementPlugin(),
+                new ExtractCssChunks({
+                    filename: "[name].styles.css",
+                    chunkFilename: '[id].styles-chunk.css',
+                })
             ] : [
                 new CleanWebpackPlugin(),
-                new MiniCssExtractPlugin({
+                new ExtractCssChunks({
                     filename: "[name].styles.css"
-                }),
+                })
             ],
         devServer: isDevelopment ? {
-            proxy: {
-                ['!'+publicPath+'*']: {
-                    target: protocol+'://node-server:8082',
-                    secure: false
-                }
-            },
             headers: {
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
             },
+            disableHostCheck: true,
             host: serverUrl,
             overlay: true,
             publicPath: protocol+'://'+serverUrl+':'+port+publicPath,

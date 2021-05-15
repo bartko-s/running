@@ -5,3 +5,4 @@
 /browser/yarn-error.log
 /server/node_modules/
 /server/yarn-error.log
+/server/build/
