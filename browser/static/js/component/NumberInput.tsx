@@ -21,11 +21,11 @@ export function NumberInput(props: Props) {
         if(isFocused && inputEl.current !== null) {
             inputEl.current.select();
         }
-    })
+    }, [isFocused])
 
     function valueChangeHandler(e: React.FormEvent<HTMLInputElement>) {
         const value = e.currentTarget.value
-        setIsFocused(false);
+        setIsFocused(true);
         props.onValueChange(Number(value))
     }
 
@@ -44,7 +44,7 @@ export function NumberInput(props: Props) {
         if(props.valueFormatter != undefined && !isFocused) {
             return props.valueFormatter(props.value)
         } else {
-            return props.value.toString()
+            return  props.value.toString()
         }
     }
 
