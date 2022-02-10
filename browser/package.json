@@ -33,7 +33,7 @@
     "cssnano": "^5.0.2",
     "extract-css-chunks-webpack-plugin": "^4.7.5",
     "file-loader": "^6.0.0",
-    "node-sass": "^6.0.0",
+    "node-sass": "^7.0.0",
     "postcss": "^8.1.7",
     "postcss-loader": "^5.2.0",
     "react-hot-loader": "^4.12.21",
