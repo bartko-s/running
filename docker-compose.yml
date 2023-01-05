@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  node:
+    build: docker/node
+    command: yarn dev
+    ports:
+      - 80:3000
+    volumes:
+      - .:/app/

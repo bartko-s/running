@@ -1,0 +1,34 @@
+.lock {
+  display: block;
+  height: 3rem;
+  width: 3rem;
+  padding: 0;
+  border: 0;
+  font-size: 0;
+  background-color: #fff;
+  &:before {
+    display: block;
+    content: '';
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    mask-image: url("../styles/img/lock-opened.svg");
+    mask-repeat: no-repeat;
+    mask-position: 0 0;
+    mask-size: 3rem;
+  }
+  &Unlocked {
+    &:before {
+      background-color: green;
+    }
+    &:hover:before {
+      background-color: lighten(green, 10);
+    }
+  }
+  &Locked {
+    &:before {
+      mask-image: url("../styles/img/lock-closed.svg");
+      background-color: red;
+    }
+  }
+}

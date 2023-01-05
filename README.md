@@ -5,7 +5,6 @@ The Best Running Pace Calculator
 
 Used technologies
 -----------------
-- React
+- React (NextJS)
 - TypeScript
 - Sass
-- Webpack

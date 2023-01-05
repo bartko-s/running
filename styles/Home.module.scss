@@ -1,0 +1,36 @@
+.block {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0.5rem
+}
+
+.label {
+    display: inline-block;
+    padding: 0 0.5rem;
+    width: 8.2rem;
+    font-size: 1.8rem;
+}
+
+.unit {
+    margin-left: 0.5rem;
+}
+
+.separator {
+    display: inline-block;
+    padding: 0 0.2rem;
+    font-size: 3rem;
+}
+
+.worldRecordsLink {
+    text-indent:-9999px;
+    margin-left: 1rem;
+    mask-image: url('../styles/img/medal-of-number-one.svg');
+    mask-size: 100%;
+    background-color: darkgoldenrod;
+    display: inline-block;
+    height: 4rem;
+    width: 4rem;
+    &:hover {
+        background-color: darken(darkgoldenrod, 10);
+    }
+}

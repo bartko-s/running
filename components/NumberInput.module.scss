@@ -1,0 +1,34 @@
+.remove-spinner {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  -moz-appearance:textfield;
+}
+
+.input {
+  display: inline-block;
+  width: 7rem;
+  height: 4rem;
+  position: relative;
+  &Value {
+    display: inline-block;
+    width: 100%;
+    height: 4rem;
+    line-height: 4rem;
+    font-size: 3rem;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  &ValueEditable {
+    @extend .remove-spinner;
+    border: 0.1rem solid #ddd;
+    border-radius: 0.2rem;
+    &:focus {
+      background-color: #ffffaa;
+    }
+  }
+}
