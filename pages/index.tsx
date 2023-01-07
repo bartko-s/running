@@ -130,7 +130,7 @@ export default function Pace() {
   return (
       <>
         <Head>
-          <title>Running Calculator</title>
+          <title>Running Pace Calculator</title>
         </Head>
         <main className="content">
           {renderWorldRecordsModal()}
