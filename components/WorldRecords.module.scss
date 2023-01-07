@@ -122,7 +122,9 @@
   border-radius: 0.2rem;
   background-color: #fff;
   padding: 0.2rem 0.8rem;
+  transition: background-color 0.3s;
   &:hover {
     background-color: #ddd;
+    transition: background-color 0.3s;
   }
 }

@@ -20,9 +20,11 @@
   &Unlocked {
     &:before {
       background-color: green;
+      transition: background-color 0.3s;
     }
     &:hover:before {
       background-color: lighten(green, 10);
+      transition: background-color 0.3s;
     }
   }
   &Locked {

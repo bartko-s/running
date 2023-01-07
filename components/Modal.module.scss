@@ -30,7 +30,9 @@
   mask-repeat: no-repeat;
   background-color: red;
   float: right;
+  transition: background-color 0.3s;
   &:hover {
     background-color: darken(red, 15);
+    transition: background-color 0.3s;
   }
 }
