@@ -1,4 +1,8 @@
 FROM node:18
 
+ARG DOCKER_HOST_USER_ID
+
 RUN mkdir /app
 WORKDIR /app/
+
+USER $DOCKER_HOST_USER_ID
