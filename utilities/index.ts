@@ -26,3 +26,26 @@ export function secondsToFullTime(time: number): string {
 
     return result
 }
+
+interface TimeParts {
+    hours: number
+    minutes: number
+    seconds: number
+    totalMinutes: number
+    totalSeconds: number
+}
+
+export function timeExtractor(time: number): TimeParts {
+    time = Math.round(time)
+    const hours = Math.floor(time / 3600)
+    const minutes = Math.floor((time - (3600 * hours)) / 60)
+    const seconds = Math.round(time - ((hours * 3600) + (minutes * 60)))
+
+    return {
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
+        totalSeconds: time,
+        totalMinutes: (hours * 60) + minutes,
+    }
+}

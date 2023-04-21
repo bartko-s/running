@@ -1,6 +1,6 @@
 import React from 'react';
 import {NumberInput} from "./NumberInput"
-import {formatTimeDigits} from "../utilities"
+import {formatTimeDigits, timeExtractor} from "../utilities"
 
 type Props = Readonly<{
     time: number
@@ -14,7 +14,7 @@ export function Hours(props: Props) {
     }
 
     return (
-        <NumberInput value={extractHoursPart(props.time)}
+        <NumberInput value={timeExtractor(props.time).hours}
                      isLocked={props.isLocked}
                      onValueChange={valueChangeHandler}
                      valueFormatter={formatTimeDigits}
@@ -22,13 +22,7 @@ export function Hours(props: Props) {
     )
 }
 
-function extractHoursPart(totalTimeInSeconds: number): number {
-    return Math.floor(totalTimeInSeconds / 3600)
-}
-
 function setNewHoursPart(hours: number, oldTimeInSeconds: number): number {
-    const oldHours = Math.floor(oldTimeInSeconds / 3600)
-    const minutes = Math.floor((oldTimeInSeconds - (oldHours * 3600)) / 60)
-    const seconds = oldTimeInSeconds - (Math.floor(oldTimeInSeconds / 60) * 60)
-    return (hours * 3600) + (minutes * 60) + seconds
+    const old = timeExtractor(oldTimeInSeconds)
+    return (((hours * 60) + old.minutes) * 60) + old.seconds
 }
