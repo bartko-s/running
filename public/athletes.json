@@ -97,50 +97,50 @@
     },
     {
         "distance": 21.0975,
-        "time": 3481,
-        "location_abbr": "DEN",
-        "location": "Denmark",
-        "data": 2019,
+        "time": 3451,
+        "location_abbr": "POR",
+        "location": "Lisbon",
+        "data": 2021,
         "gender": "male",
-        "name": "Geoffrey Kamworor",
-        "nationality": "Kenya",
-        "nationality_abbr": "KEN"
+        "name": "Jacob Kiplimo",
+        "nationality": "Uganda",
+        "nationality_abbr": "UGA"
 
     },
     {
         "distance": 21.0975,
-        "time": 3871,
-        "location_abbr": "UAE",
-        "location": "United Arab Emirates",
-        "data": 2020,
+        "time": 3772,
+        "location_abbr": "SPA",
+        "location": "Valencia",
+        "data": 2021,
         "gender": "female",
-        "name": "Ababel Yeshaneh",
+        "name": "Letesenbet Gidey",
         "nationality": "Ethiopia",
         "nationality_abbr": "ETH"
 
     },
     {
         "distance": 42.195,
-        "time": 7299,
-        "location_abbr": "GER",
-        "location": "Germany",
-        "data": 2018,
+        "time": 7235,
+        "location_abbr": "USA",
+        "location": "Chicago",
+        "data": 2023,
         "gender": "male",
-        "name": "Eliud Kipchoge",
+        "name": "Kelvin Kiptum",
         "nationality": "Kenya",
         "nationality_abbr": "KEN"
 
     },
     {
         "distance": 42.195,
-        "time": 8044,
-        "location_abbr": "USA",
-        "location": "Chicago",
-        "data": 2019,
+        "time": 7913,
+        "location_abbr": "GER",
+        "location": "Berlin",
+        "data": 2023,
         "gender": "female",
-        "name": "Brigid Kosgei",
-        "nationality": "Kenya",
-        "nationality_abbr": "KEN"
+        "name": "Tigst Assefa",
+        "nationality": "Ethiopia",
+        "nationality_abbr": "ETH"
 
     }
 ]
